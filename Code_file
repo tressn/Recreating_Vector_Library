@@ -1,0 +1,145 @@
+
+#include <iostream>
+using namespace std;
+
+class Vec
+{
+    private:
+        int sz;
+        int cap;
+        int *arr;
+    public:
+         Vec()
+        {
+            this->sz = 0;
+            this->cap = 4;
+            arr = new int[this->cap];
+        }
+
+      Vec(int n, int v) //add n number of v values to an array
+        {
+           this->sz = n;
+            this->cap = n;
+            arr = new int[this->cap];
+
+            for ( int i = 0; i < n; i++ )
+            {
+                arr[i] = v;
+            }
+        }
+
+        ~Vec() { delete[] arr; }
+
+       void push_back(int v)  //adds a new value to the end of the array
+       {
+         if(sz==cap) //check capacity of array
+         {
+          cap*=2;   //doubles capacity
+
+          int * new_arr= new int [cap];   //create temporary array
+          for (int i = 0; i < sz; i++)     //loop that copies old array into new array
+            { 
+              new_arr[i] = arr[i]; 
+            } 
+        
+          delete [] arr; //delete old array
+          arr = new_arr;               //sets old array value to the new array
+         }
+      
+        arr[sz]=v;     //add new value
+        sz++;         //increase size by 1
+
+       }
+        
+        int size() // returns number of elements in the vector
+        {
+            return this->sz;
+        }
+
+        int capacity()  //returns capacity value
+        {
+            return this->cap;
+        }
+
+        void reserve(int n) //reserves capacity space for vector array
+        {
+          if (n > cap)
+          {
+            cap=n;
+          }
+        }
+
+
+        int at(int idx)  //will return value at a specific index
+        {
+          return this->arr[idx];
+        }
+
+        void insert(int idx, int v) //will insert a value at a given index and shift the array back
+        {
+
+          if(sz==cap) //check capacity of array
+            {
+             cap*=2;   //doubles capacity
+
+          int * new_arr= new int [cap];   //create temporary array
+        for (int i = 0; i < sz; i++)     //loop that copies old array into new array
+            { 
+              new_arr[i] = arr[i]; 
+            } 
+        
+        delete [] arr; //delete old array
+        arr = new_arr;               //sets old array value to the new array
+            }
+          
+          sz++;                             //increases size by 1
+          for(int i=sz;i>=idx;i--)
+          {arr[i]=arr[i-1];}
+          
+          arr[idx-1]=v;
+        
+
+        }
+
+        void erase(int idx) //will erase the value at a given index and shift the remaining values forward
+        {
+    
+          for (int i=idx; i<sz; i++) 
+            {arr[i] = arr[i+1];}  //shifts array by 1 
+          sz--;                             //reduces capacity by 1
+        }
+};
+
+int main()
+{
+
+   //project Examples
+    Vec v;
+    cout << v.size() << endl;       // 0
+    cout << v.capacity() << endl;   // 4
+    
+
+    v.push_back(3); // append, add
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(4);
+    v.push_back(6);
+    v.push_back(9);
+
+    v.insert(4, 7);
+    v.erase(1);
+
+    v.reserve(10);
+    cout << v.capacity() << endl;
+
+
+    for ( int i = 0; i < v.size(); i++ )
+    {
+        cout <<v.at(i) <<" ";
+    }
+
+    cout << endl;
+
+    cout << v.size() << endl;       // 0
+    return 0;
+}
